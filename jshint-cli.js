@@ -52,147 +52,145 @@ function usage() {
   exit(0);
 }
 
-function main() {
-  var args = getargs();
-  var option = {};
-  var filename = null;
+function parse_arguments(args) {
+  var res = {
+    args: [],
+    option: {}
+  };
   var i;
-  if (args.length === 0) {
-    usage();
-  }
   for (i = 0; i < args.length; ++i) {
     if (args[i] === '-h' || args[i] === '--help') {
       usage();
     } else if (args[i] === '--adsafe') {
-      option.adsafe = true;
+      res.option.adsafe = true;
     } else if (args[i] === '--asi') {
-      option.asi = true;
+      res.option.asi = true;
     } else if (args[i] === '--bitwise') {
-      option.bitwise = true;
+      res.option.bitwise = true;
     } else if (args[i] === '--browser') {
-      option.browser = true;
+      res.option.browser = true;
     } else if (args[i] === '--boss') {
-      option.boss = true;
+      res.option.boss = true;
     } else if (args[i] === '--cap') {
-      option.cap = true;
+      res.option.cap = true;
     } else if (args[i] === '--css') {
-      option.css = true;
+      res.option.css = true;
     } else if (args[i] === '--couch') {
-      option.couch = true;
+      res.option.couch = true;
     } else if (args[i] === '--debug') {
-      option.debug = true;
+      res.option.debug = true;
     } else if (args[i] === '--devel') {
-      option.devel = true;
+      res.option.devel = true;
     } else if (args[i] === '--eqeqeq') {
-      option.eqeqeq = true;
+      res.option.eqeqeq = true;
     } else if (args[i] === '--es5') {
-      option.devel = true;
+      res.option.devel = true;
     } else if (args[i] === '--evil') {
-      option.evil = true;
+      res.option.evil = true;
     } else if (args[i] === '--expr') {
-      option.expr = true;
+      res.option.expr = true;
     } else if (args[i] === '--forin') {
-      option.forin = true;
+      res.option.forin = true;
     } else if (args[i] === '--fragment') {
-      option.fragment = true;
+      res.option.fragment = true;
     } else if (args[i] === '--immed') {
-      option.immed = true;
+      res.option.immed = true;
     } else if (args[i].match(/^--indent(?:=(.+))?/)) {
       if (RegExp.$1 !== '') {
-        option.indent = parseInt(RegExp.$1, 10);
+        res.option.indent = parseInt(RegExp.$1, 10);
       } else {
-        option.indent = parseInt(process.argv[++i], 10);
+        res.option.indent = parseInt(process.argv[++i], 10);
       }
     } else if (args[i] === '--jquery') {
-      option.jquery = true;
+      res.option.jquery = true;
     } else if (args[i] === '--latedef') {
-      option.latedef = true;
+      res.option.latedef = true;
     } else if (args[i] === '--laxbreak') {
-      option.laxbreak = true;
+      res.option.laxbreak = true;
     } else if (args[i] === '--loopfunc') {
-      option.loopfunc = true;
+      res.option.loopfunc = true;
     } else if (args[i].match(/^--maxerr(?:=(.+))?/)) {
       if (RegExp.$1 !== '') {
-        option.maxerr = parseInt(RegExp.$1, 10);
+        res.option.maxerr = parseInt(RegExp.$1, 10);
       } else {
-        option.maxerr = parseInt(process.argv[++i], 10);
+        res.option.maxerr = parseInt(process.argv[++i], 10);
       }
     } else if (args[i].match(/^--maxlen(?:=(.+))?/)) {
       if (RegExp.$1 !== '') {
-        option.maxlen = parseInt(RegExp.$1, 10);
+        res.option.maxlen = parseInt(RegExp.$1, 10);
       } else {
-        option.maxlen = parseInt(process.argv[++i], 10);
+        res.option.maxlen = parseInt(process.argv[++i], 10);
       }
     } else if (args[i] === '--newcap') {
-      option.newcap = true;
+      res.option.newcap = true;
     } else if (args[i] === '--noarg') {
-      option.noarg = true;
+      res.option.noarg = true;
     } else if (args[i] === '--node') {
-      option.node = true;
+      res.option.node = true;
     } else if (args[i] === '--noempty') {
-      option.noempty = true;
+      res.option.noempty = true;
     } else if (args[i] === '--nonew') {
-      option.nonew = true;
+      res.option.nonew = true;
     } else if (args[i] === '--nomen') {
-      option.nomen = true;
+      res.option.nomen = true;
     } else if (args[i] === '--on') {
-      option.on = true;
+      res.option.on = true;
     } else if (args[i] === '--onevar') {
-      option.onevar = true;
+      res.option.onevar = true;
     } else if (args[i] === '--passfail') {
-      option.passfail = true;
+      res.option.passfail = true;
     } else if (args[i] === '--plusplus') {
-      option.plusplus = true;
+      res.option.plusplus = true;
     } else if (args[i] === '--prototypejs') {
-      option.prototypejs = true;
+      res.option.prototypejs = true;
     } else if (args[i] === '--regexp') {
-      option.regexp = true;
+      res.option.regexp = true;
     } else if (args[i] === '--rhino') {
-      option.rhino = true;
+      res.option.rhino = true;
     } else if (args[i] === '--undef') {
-      option.undef = true;
+      res.option.undef = true;
     } else if (args[i] === '--safe') {
-      option.safe = true;
+      res.option.safe = true;
     } else if (args[i] === '--shadow') {
-      option.shadow = true;
+      res.option.shadow = true;
     } else if (args[i] === '--windows') {
-      option.windows = true;
+      res.option.windows = true;
     } else if (args[i] === '--strict') {
-      option.strict = true;
+      res.option.strict = true;
     } else if (args[i] === '--sub') {
-      option.sub = true;
+      res.option.sub = true;
     } else if (args[i] === '--white') {
-      option.white = true;
+      res.option.white = true;
     } else if (args[i] === '--widget') {
-      option.widget = true;
+      res.option.widget = true;
     } else if (args[i].match(/^-/)) {
       print('unknown option: ' + args[i]);
       exit(1);
     } else {
-      filename = args[i];
+      res.args.push(args[i]);
     }
   }
-  if (filename === null) {
+  return res;
+}
+
+function main() {
+  var args, filename, data, noerror, i;
+  args = parse_arguments(getargs());
+  if (args.args.length === 0) {
     usage();
   }
-  readfile(filename, function(err, data) {
-    if (err) {
-      throw err;
-    }
-    var ok = JSHINT(data, option);
-    if (ok) {
-      return;
-    }
-    var errors = JSHINT.errors;
-    var i;
-    for (i = 0; i < errors.length; ++i) {
-      var e = errors[i];
-      if (e.reason.match(/^(Stopping|Too many errors)/)) {
+  filename = args.args[0];
+  data = readfile(filename, 'utf-8');
+  noerror = JSHINT(data, args.option);
+  if (!noerror) {
+    for (i = 0; i < JSHINT.errors.length; ++i) {
+      var e = JSHINT.errors[i];
+      if (e === null) {
         break;
       }
       print([filename, e.line, e.character, e.reason].join(':'));
     }
-  });
+  }
 }
 
 main();
