@@ -164,7 +164,7 @@ goto :eof
  "(identifier)", "(last)", "(line)", "(loopage)", "(name)", "(onevar)",
  "(params)", "(scope)", "(statement)", "(verb)", "*", "+", "++", "-",
  "--", "\/", "<", "<=", "==", "===", ">", ">=", $, $$, $A, $F, $H, $R, $break,
- $continue, $w, Abstract, Ajax, ADSAFE, __filename, __dirname,
+ $continue, $w, Abstract, Ajax, __filename, __dirname,
  ActiveXObject, Array, ArrayBuffer, ArrayBufferView, Autocompleter,
  Boolean, Builder, Buffer, COM, CScript, Canvas, CustomAnimation,
  Class, Control, DataView, Date, Debug, Draggable, Draggables,
@@ -182,9 +182,9 @@ goto :eof
  XMLDOM, XMLHttpRequest, XPathEvaluator, XPathException, XPathExpression,
  XPathNamespace, XPathNSResolver, XPathResult,
  "\\", a, abbr, acronym, activeborder, activecaption,
- addEventListener, address, adsafe, alert, aliceblue, all, animator,
- antiquewhite, appleScript, applet, apply,
- approved, appworkspace, applicationCache, aqua, aquamarine, area, arguments,
+ addEventListener, address, alert, aliceblue, all, animator,
+ antiquewhite, appleScript, applet, apply, appworkspace,
+ applicationCache, aqua, aquamarine, area, arguments,
  arity, article, asi, aside, audio, autocomplete, azure, b, background,
  "background-attachment", "background-color", "background-image",
  "background-position", "background-repeat", base, bdo, beep, beige, big,
@@ -258,7 +258,7 @@ goto :eof
  raw, reach, readFile, readUrl, reason, red, regexp, reloadWidget,
  removeEventListener, replace, report, require, reserved, resizeBy, resizeTo,
  resolvePath, resumeUpdates, respond, rhino, right, rosybrown, royalblue,
- rp, rt, ruby, runCommand, runCommandInBg, saddlebrown, safe, salmon, samp,
+ rp, rt, ruby, runCommand, runCommandInBg, saddlebrown, salmon, samp,
  sandybrown, saveAs, savePreferences, screen, script, scroll, scrollBy,
  scrollTo, scrollbar, seagreen, seal, search, seashell, section, send, select,
  serialize, setInterval, setTimeout, shift, showWidgetPreferences,
@@ -274,8 +274,8 @@ goto :eof
  tty, turquoise, tv, type, Uint16Array, Uint32Array, Uint8Array, u, ul, undef,
  unescape, "unicode-bidi", unused, unwatch, updateNow, urls, value, valueOf,
  var, version, "vertical-align", video, violet, visibility, watch,
- WebSocket, wheat, white, "white-space", whitesmoke, widget, width,
- window, windowframe, windows, windowtext, Worker, "word-spacing", "word-wrap",
+ WebSocket, wheat, white, "white-space", whitesmoke, width,
+ window, windowframe, windowtext, Worker, "word-spacing", "word-wrap",
  yahooCheckLogin, yahooLogin, yahooLogout, yellow, yellowgreen, "z-index"
 */
 
@@ -288,11 +288,7 @@ goto :eof
 var JSHINT = (function () {
     "use strict";
 
-    var adsafe_id,      // The widget's ADsafe id.
-        adsafe_may,     // The widget may load approved scripts.
-        adsafe_went,    // ADSAFE.go has been called.
-        anonname,       // The guessed name for anonymous functions.
-        approved,       // ADsafe approved urls.
+    var anonname,       // The guessed name for anonymous functions.
 
 // These are operators that should not be used with the ! operator.
 
@@ -312,26 +308,9 @@ var JSHINT = (function () {
             '%'  : true
         },
 
-// These are property names that should not be permitted in the safe subset.
-
-        banned = { // the member names that ADsafe prohibits.
-            'arguments'     : true,
-            callee          : true,
-            caller          : true,
-            constructor     : true,
-            'eval'          : true,
-            prototype       : true,
-            stack           : true,
-            unwatch         : true,
-            valueOf         : true,
-            watch           : true
-        },
-
-
 // These are the JSHint boolean options.
 
         boolOptions = {
-            adsafe     : true, // if ADsafe should be enforced
             asi        : true, // if automatic semicolon insertion should be tolerated
             bitwise    : true, // if bitwise operators should not be allowed
             boss       : true, // if advanced usage of assignments and == should be allowed
@@ -367,13 +346,10 @@ var JSHINT = (function () {
             regexp     : true, // if the . should not be allowed in regexp literals
             rhino      : true, // if the Rhino environment globals should be predefined
             undef      : true, // if variables should be declared before used
-            safe       : true, // if use of some browser features should be restricted
             shadow     : true, // if variable shadowing should be tolerated
-            windows    : true, // if MS Windows-specific globals should be predefined
             strict     : true, // require the "use strict"; pragma
             sub        : true, // if all forms of subscript notation are tolerated
-            white      : true, // if strict whitespace rules apply
-            widget     : true  // if the Yahoo Widgets globals should be predefined
+            white      : true  // if strict whitespace rules apply
         },
 
 // browser contains a set of global names which are commonly provided by a
@@ -958,96 +934,6 @@ var JSHINT = (function () {
         urls,
         warnings,
 
-// widget contains the global names which are provided to a Yahoo
-// (fna Konfabulator) widget.
-
-        widget = {
-            alert                   : true,
-            animator                : true,
-            appleScript             : true,
-            beep                    : true,
-            bytesToUIString         : true,
-            Canvas                  : true,
-            chooseColor             : true,
-            chooseFile              : true,
-            chooseFolder            : true,
-            closeWidget             : true,
-            COM                     : true,
-            convertPathToHFS        : true,
-            convertPathToPlatform   : true,
-            CustomAnimation         : true,
-            escape                  : true,
-            FadeAnimation           : true,
-            filesystem              : true,
-            Flash                   : true,
-            focusWidget             : true,
-            form                    : true,
-            FormField               : true,
-            Frame                   : true,
-            HotKey                  : true,
-            Image                   : true,
-            include                 : true,
-            isApplicationRunning    : true,
-            iTunes                  : true,
-            konfabulatorVersion     : true,
-            log                     : true,
-            md5                     : true,
-            MenuItem                : true,
-            MoveAnimation           : true,
-            openURL                 : true,
-            play                    : true,
-            Point                   : true,
-            popupMenu               : true,
-            preferenceGroups        : true,
-            preferences             : true,
-            print                   : true,
-            prompt                  : true,
-            random                  : true,
-            Rectangle               : true,
-            reloadWidget            : true,
-            ResizeAnimation         : true,
-            resolvePath             : true,
-            resumeUpdates           : true,
-            RotateAnimation         : true,
-            runCommand              : true,
-            runCommandInBg          : true,
-            saveAs                  : true,
-            savePreferences         : true,
-            screen                  : true,
-            ScrollBar               : true,
-            showWidgetPreferences   : true,
-            sleep                   : true,
-            speak                   : true,
-            Style                   : true,
-            suppressUpdates         : true,
-            system                  : true,
-            tellWidget              : true,
-            Text                    : true,
-            TextArea                : true,
-            Timer                   : true,
-            unescape                : true,
-            updateNow               : true,
-            URL                     : true,
-            Web                     : true,
-            widget                  : true,
-            Window                  : true,
-            XMLDOM                  : true,
-            XMLHttpRequest          : true,
-            yahooCheckLogin         : true,
-            yahooLogin              : true,
-            yahooLogout             : true
-        },
-
-        windows = {
-            ActiveXObject: false,
-            CScript      : false,
-            Debug        : false,
-            Enumerator   : false,
-            System       : false,
-            VBArray      : false,
-            WScript      : false
-        },
-
 //  xmode is used to adapt to the exceptions in html parsing.
 //  It can have these states:
 //      false   .js script file
@@ -1208,9 +1094,6 @@ var JSHINT = (function () {
     }
 
     function assume() {
-        if (option.safe)
-            return;
-
         if (option.couch)
             combine(predefined, couch);
 
@@ -1231,12 +1114,6 @@ var JSHINT = (function () {
 
         if (option.jquery)
             combine(predefined, jquery);
-
-        if (option.windows)
-            combine(predefined, windows);
-
-        if (option.widget)
-            combine(predefined, widget);
     }
 
 
@@ -1491,21 +1368,13 @@ var JSHINT = (function () {
                         } else if (c === xquote) {
                             warningAt("Bad HTML string", line, character + j);
                         } else if (c === '<') {
-                            if (option.safe && xmode === 'html') {
-                                warningAt("ADsafe string violation.",
-                                        line, character + j);
-                            } else if (s.charAt(j + 1) === '/' && (xmode || option.safe)) {
+                            if (s.charAt(j + 1) === '/' && xmode) {
                                 warningAt("Expected '<\\/' and instead saw '</'.", line, character);
-                            } else if (s.charAt(j + 1) === '!' && (xmode || option.safe)) {
+                            } else if (s.charAt(j + 1) === '!' && xmode) {
                                 warningAt("Unexpected '<!' in a string.", line, character);
                             }
                         } else if (c === '\\') {
-                            if (xmode === 'html') {
-                                if (option.safe) {
-                                    warningAt("ADsafe string violation.",
-                                            line, character + j);
-                                }
-                            } else if (xmode === 'styleproperty') {
+                            if (xmode === 'styleproperty') {
                                 j += 1;
                                 character += 1;
                                 c = s.charAt(j);
@@ -1659,7 +1528,7 @@ var JSHINT = (function () {
                                 warningAt("Unexpected comment.", line, character);
                             } else if (xmode === 'script' && /<\s*\//i.test(s)) {
                                 warningAt("Unexpected <\/ in comment.", line, character);
-                            } else if ((option.safe || xmode === 'script') && ax.test(s)) {
+                            } else if (xmode === 'script' && ax.test(s)) {
                                 warningAt("Dangerous comment.", line, character);
                             }
                             s = '';
@@ -1672,9 +1541,6 @@ var JSHINT = (function () {
                             if (src || (xmode && xmode !== 'script' && xmode !== 'style' && xmode !== 'styleproperty')) {
                                 warningAt("Unexpected comment.", line, character);
                             }
-                            if (option.safe && ax.test(s)) {
-                                warningAt("ADsafe comment violation.", line, character);
-                            }
                             for (;;) {
                                 i = s.search(lx);
                                 if (i >= 0) {
@@ -1682,11 +1548,6 @@ var JSHINT = (function () {
                                 }
                                 if (!nextLine()) {
                                     errorAt("Unclosed comment.", line, character);
-                                } else {
-                                    if (option.safe && ax.test(s)) {
-                                        warningAt("ADsafe comment violation.",
-                                                line, character);
-                                    }
                                 }
                             }
                             character += i + 2;
@@ -2057,10 +1918,7 @@ klass:                                  do {
 
     function addlabel(t, type) {
 
-        if (option.safe && funct['(global)'] &&
-                typeof predefined[t] !== 'boolean') {
-            warning('ADsafe global: ' + t + '.', token);
-        } else if (t === 'hasOwnProperty') {
+        if (t === 'hasOwnProperty') {
             warning("'hasOwnProperty' is a really bad name.");
         }
 
@@ -2105,16 +1963,10 @@ klass:                                  do {
             obj = membersOnly;
             break;
         case '/*jshint':
-            if (option.safe) {
-                warning("ADsafe restriction.");
-            }
             obj = option;
             filter = boolOptions;
             break;
         case '/*global':
-            if (option.safe) {
-                warning("ADsafe restriction.");
-            }
             obj = predefined;
             break;
         default:
@@ -2288,10 +2140,6 @@ loop:   for (;;) {
             error("Unexpected early end of program.", token);
         }
         advance();
-        if (option.safe && typeof predefined[token.value] === 'boolean' &&
-                (nexttoken.id !== '(' && nexttoken.id !== '.')) {
-            warning('ADsafe violation.', token);
-        }
         if (initial) {
             anonname = 'anonymous';
             funct['(verb)'] = token.value;
@@ -2303,8 +2151,7 @@ loop:   for (;;) {
                 left = token.nud();
             } else {
                 if (nexttoken.type === '(number)' && token.id === '.') {
-                    warning(
-"A leading decimal point can be confused with a dot: '.{a}'.",
+                    warning("A leading decimal point can be confused with a dot: '.{a}'.",
                             token, nexttoken.value);
                     advance();
                     return token;
@@ -2573,15 +2420,6 @@ loop:   for (;;) {
             } else if (left['function']) {
                 warning("'{a}' is a function.", left, left.value);
             }
-            if (option.safe) {
-                l = left;
-                do {
-                    if (typeof predefined[l.value] === 'boolean') {
-                        warning('ADsafe violation.', l);
-                    }
-                    l = l.left;
-                } while (l);
-            }
             if (left) {
                 if (left.id === '.' || left.id === '[') {
                     if (!left.left || left.left.value === 'arguments') {
@@ -2669,9 +2507,7 @@ loop:   for (;;) {
     function optionalidentifier(fnparam) {
         if (nexttoken.identifier) {
             advance();
-            if (option.safe && banned[token.value]) {
-                warning("ADsafe violation: '{a}'.", token, token.value);
-            } else if (token.reserved && !option.es5) {
+            if (token.reserved && !option.es5) {
                 // `undefined` as a function param is a common pattern to protect
                 // against the case when somebody does `undefined = true` and
                 // help with minification. More info: https://gist.github.com/315916
@@ -2807,66 +2643,7 @@ loop:   for (;;) {
 
     function statements(begin) {
         var a = [], f, p;
-        if (option.adsafe) {
-            switch (begin) {
-            case 'script':
 
-// JSHint is also the static analizer for ADsafe. See www.ADsafe.org.
-
-                if (!adsafe_may) {
-                    if (nexttoken.value !== 'ADSAFE' ||
-                            peek(0).id !== '.' ||
-                            (peek(1).value !== 'id' &&
-                            peek(1).value !== 'go')) {
-                        error('ADsafe violation: Missing ADSAFE.id or ADSAFE.go.',
-                            nexttoken);
-                    }
-                }
-                if (nexttoken.value === 'ADSAFE' &&
-                        peek(0).id === '.' &&
-                        peek(1).value === 'id') {
-                    if (adsafe_may) {
-                        error('ADsafe violation.', nexttoken);
-                    }
-                    advance('ADSAFE');
-                    advance('.');
-                    advance('id');
-                    advance('(');
-                    if (nexttoken.value !== adsafe_id) {
-                        error('ADsafe violation: id does not match.', nexttoken);
-                    }
-                    advance('(string)');
-                    advance(')');
-                    advance(';');
-                    adsafe_may = true;
-                }
-                break;
-            case 'lib':
-                if (nexttoken.value === 'ADSAFE') {
-                    advance('ADSAFE');
-                    advance('.');
-                    advance('lib');
-                    advance('(');
-                    advance('(string)');
-                    comma();
-                    f = expression(0);
-                    if (f.id !== 'function') {
-                        error('The second argument to lib must be a function.', f);
-                    }
-                    p = f.funct['(params)'];
-                    p = p && p.join(', ');
-                    if (p && p !== 'lib') {
-                        error("Expected '{a}' and instead saw '{b}'.",
-                            f, '(lib)', '(' + p + ')');
-                    }
-                    advance(')');
-                    advance(';');
-                    return a;
-                } else {
-                    error("ADsafe lib violation.");
-                }
-            }
-        }
         while (!nexttoken.reach && nexttoken.id !== '(end)') {
             if (nexttoken.id === ';') {
                 warning("Unnecessary semicolon.");
@@ -3237,9 +3014,6 @@ loop:   for (;;) {
                 warning("Missing url.");
             }
             advance();
-            if (option.safe && ux.test(url)) {
-                error("ADsafe URL violation.");
-            }
             urls.push(url);
             return true;
         }
@@ -3845,25 +3619,7 @@ loop:   for (;;) {
 
     function doBegin(n) {
         if (n !== 'html' && !option.fragment) {
-            if (n === 'div' && option.adsafe) {
-                error("ADSAFE: Use the fragment option.");
-            } else {
-                error("Expected '{a}' and instead saw '{b}'.",
-                    token, 'html', n);
-            }
-        }
-        if (option.adsafe) {
-            if (n === 'html') {
-                error(
-"Currently, ADsafe does not operate on whole HTML documents. It operates on <div> fragments and .js files.", token);
-            }
-            if (option.fragment) {
-                if (n !== 'div') {
-                    error("ADsafe violation: Wrap the widget in a div.", token);
-                }
-            } else {
-                error("Use the fragment option.", token);
-            }
+            error("Expected '{a}' and instead saw '{b}'.", token, 'html', n);
         }
         option.browser = true;
         assume();
@@ -3878,20 +3634,6 @@ loop:   for (;;) {
             }
             if (!/^[A-Za-z][A-Za-z0-9._:\-]*$/.test(v)) {
                 warning("Bad id: '{a}'.", nexttoken, v);
-            } else if (option.adsafe) {
-                if (adsafe_id) {
-                    if (v.slice(0, adsafe_id.length) !== adsafe_id) {
-                        warning("ADsafe violation: An id must have a '{a}' prefix",
-                                nexttoken, adsafe_id);
-                    } else if (!/^[A-Z]+_[A-Z]+$/.test(v)) {
-                        warning("ADSAFE violation: bad id.");
-                    }
-                } else {
-                    adsafe_id = v;
-                    if (!/^[A-Z]+_$/.test(v)) {
-                        warning("ADSAFE violation: bad id.");
-                    }
-                }
             }
             x = v.search(dx);
             if (x >= 0) {
@@ -3907,27 +3649,7 @@ loop:   for (;;) {
         } else if (a === 'href' || a === 'background' ||
                 a === 'content' || a === 'data' ||
                 a.indexOf('src') >= 0 || a.indexOf('url') >= 0) {
-            if (option.safe && ux.test(v)) {
-                error("ADsafe URL violation.");
-            }
             urls.push(v);
-        } else if (a === 'for') {
-            if (option.adsafe) {
-                if (adsafe_id) {
-                    if (v.slice(0, adsafe_id.length) !== adsafe_id) {
-                        warning("ADsafe violation: An id must have a '{a}' prefix",
-                                nexttoken, adsafe_id);
-                    } else if (!/^[A-Z]+_[A-Z]+$/.test(v)) {
-                        warning("ADSAFE violation: bad id.");
-                    }
-                } else {
-                    warning("ADSAFE violation: bad id.");
-                }
-            }
-        } else if (a === 'name') {
-            if (option.adsafe && v.indexOf('_') >= 0) {
-                warning("ADsafe name violation.");
-            }
         }
     }
 
@@ -3950,7 +3672,7 @@ loop:   for (;;) {
                     error("A '<{a}>' must be within '<{b}>'.",
                             token, n, x);
                 }
-            } else if (!option.adsafe && !option.fragment) {
+            } else if (!option.fragment) {
                 i = stack.length;
                 do {
                     if (i <= 0) {
@@ -3962,11 +3684,6 @@ loop:   for (;;) {
             }
         }
         switch (n) {
-        case 'div':
-            if (option.adsafe && stack.length === 1 && !adsafe_id) {
-                warning("ADSAFE violation: missing ID_.");
-            }
-            break;
         case 'script':
             xmode = 'script';
             advance('>');
@@ -3974,20 +3691,11 @@ loop:   for (;;) {
             if (a.lang) {
                 warning("lang is deprecated.", token);
             }
-            if (option.adsafe && stack.length !== 1) {
-                warning("ADsafe script placement violation.", token);
-            }
             if (a.src) {
-                if (option.adsafe && (!adsafe_may || !approved[a.src])) {
-                    warning("ADsafe unapproved script source.", token);
-                }
                 if (a.type) {
                     warning("type is unnecessary.", token);
                 }
             } else {
-                if (adsafe_went) {
-                    error("ADsafe script violation.", token);
-                }
                 use_strict();
                 statements('script');
             }
@@ -4020,16 +3728,12 @@ loop:   for (;;) {
             case 'button':
             case 'reset':
             case 'submit':
-                break;
             case 'text':
             case 'file':
             case 'password':
             case 'file':
             case 'hidden':
             case 'image':
-                if (option.adsafe && a.autocomplete !== 'off') {
-                    warning("ADsafe autocomplete violation.");
-                }
                 break;
             default:
                 warning("Bad input type.");
@@ -4046,9 +3750,6 @@ loop:   for (;;) {
         case 'noframes':
         case 'object':
         case 'param':
-            if (option.adsafe) {
-                warning("ADsafe violation: Disallowed tag: " + n);
-            }
             break;
         }
     }
@@ -4215,9 +3916,6 @@ loop:   for (;;) {
                 advance('>');
                 break;
             case '<!':
-                if (option.safe) {
-                    warning("ADsafe HTML violation.");
-                }
                 xmode = 'html';
                 for (;;) {
                     advance();
@@ -4247,8 +3945,7 @@ loop:   for (;;) {
                     advance();
                 }
             }
-            if (stack && stack.length === 0 && (option.adsafe ||
-                    !option.fragment || nexttoken.id === '(end)')) {
+            if (stack && stack.length === 0 && (!option.fragment || nexttoken.id === '(end)')) {
                 break;
             }
         }
@@ -4426,15 +4123,9 @@ loop:   for (;;) {
     reservevar('arguments', function (x) {
         if (strict_mode && funct['(global)']) {
             warning("Strict violation.", x);
-        } else if (option.safe) {
-            warning("ADsafe violation.", x);
         }
     });
-    reservevar('eval', function (x) {
-        if (option.safe) {
-            warning("ADsafe violation.", x);
-        }
-    });
+    reservevar('eval');
     reservevar('false');
     reservevar('Infinity');
     reservevar('NaN');
@@ -4443,8 +4134,6 @@ loop:   for (;;) {
         if (strict_mode && ((funct['(statement)'] &&
                 funct['(name)'].charAt(0) > 'Z') || funct['(global)'])) {
             warning("Strict violation.", x);
-        } else if (option.safe) {
-            warning("ADsafe violation.", x);
         }
     });
     reservevar('true');
@@ -4672,54 +4361,9 @@ loop:   for (;;) {
         } else if (!option.evil && left && left.value === 'document' &&
                 (m === 'write' || m === 'writeln')) {
             warning("document.write can be a form of eval.", left);
-        } else if (option.adsafe) {
-            if (left && left.value === 'ADSAFE') {
-                if (m === 'id' || m === 'lib') {
-                    warning("ADsafe violation.", that);
-                } else if (m === 'go') {
-                    if (xmode !== 'script') {
-                        warning("ADsafe violation.", that);
-                    } else if (adsafe_went || nexttoken.id !== '(' ||
-                            peek(0).id !== '(string)' ||
-                            peek(0).value !== adsafe_id ||
-                            peek(1).id !== ',') {
-                        error("ADsafe violation: go.", that);
-                    }
-                    adsafe_went = true;
-                    adsafe_may = false;
-                }
-            }
         }
         if (!option.evil && (m === 'eval' || m === 'execScript')) {
             warning('eval is evil.');
-        } else if (option.safe) {
-            for (;;) {
-                if (banned[m] === true) {
-                    warning("ADsafe restricted word '{a}'.", token, m);
-                }
-                if (typeof predefined[left.value] !== 'boolean' ||
-                        nexttoken.id === '(') {
-                    break;
-                }
-                if (standard_member[m] === true) {
-                    if (nexttoken.id === '.') {
-                        warning("ADsafe violation.", that);
-                    }
-                    break;
-                }
-                if (nexttoken.id !== '.') {
-                    warning("ADsafe violation.", that);
-                    break;
-                }
-                advance('.');
-                token.left = that;
-                token.right = m;
-                that = token;
-                m = identifier();
-                if (typeof m === 'string') {
-                    countMember(m);
-                }
-            }
         }
         return that;
     }, 160, true);
@@ -4749,11 +4393,6 @@ loop:   for (;;) {
 "Missing 'new' prefix when invoking a constructor.", left);
                         }
                     }
-                }
-            } else if (left.id === '.') {
-                if (option.safe && left.left.value === 'Math' &&
-                        left.right === 'random') {
-                    warning("ADsafe violation.", left);
                 }
             }
         }
@@ -4820,14 +4459,8 @@ loop:   for (;;) {
         nospace();
         var e = expression(0), s;
         if (e && e.type === '(string)') {
-            if (option.safe && banned[e.value] === true) {
-                warning("ADsafe restricted word '{a}'.", that, e.value);
-            } else if (!option.evil &&
-                    (e.value === 'eval' || e.value === 'execScript')) {
+            if (!option.evil && (e.value === 'eval' || e.value === 'execScript')) {
                 warning("eval is evil.", that);
-            } else if (option.safe &&
-                    (e.value.charAt(0) === '_' || e.value.charAt(0) === '-')) {
-                warning("ADsafe restricted subscript '{a}'.", that, e.value);
             }
             countMember(e.value);
             if (!option.sub && ix.test(e.value)) {
@@ -4836,10 +4469,6 @@ loop:   for (;;) {
                     warning("['{a}'] is better written in dot notation.",
                             e, e.value);
                 }
-            }
-        } else if (!e || e.type !== '(number)' || e.value < 0) {
-            if (option.safe) {
-                warning('ADsafe subscripting.');
             }
         }
         advance(']', that);
@@ -4894,12 +4523,6 @@ loop:   for (;;) {
         if (!id) {
             if (nexttoken.id === '(string)') {
                 id = nexttoken.value;
-                if (option.adsafe &&
-                        (id.charAt(0) === '_' ||
-                         id.charAt(id.length - 1) === '_')) {
-                    warning("Unexpected {a} in '{b}'.", token,
-                        "dangling '_'", id);
-                }
                 advance();
             } else if (nexttoken.id === '(number)') {
                 id = nexttoken.value.toString();
@@ -5156,9 +4779,7 @@ loop:   for (;;) {
 
     blockstmt('try', function () {
         var b, e, s;
-        if (option.adsafe) {
-            warning("ADsafe try violation.", this);
-        }
+
         block(false);
         if (nexttoken.id === 'catch') {
             advance('catch');
@@ -5637,53 +5258,13 @@ loop:   for (;;) {
                     }
                 }
             }
-            if (o.adsafe) {
-                o.safe = true;
-            }
-            if (o.safe) {
-                o.browser  =
-                o.css      =
-                o.debug    =
-                o.devel    =
-                o.evil     =
-                o.forin    =
-                o.loopfunc =
-                o.on       =
-                o.rhino    =
-                o.windows  =
-                o.sub      =
-                o.widget   = false;
-
-                o.eqeqeq   =
-                o.nomen    =
-                o.safe     =
-                o.undef    = true;
-
-                predefined.Date =
-                predefined['eval'] =
-                predefined.Function =
-                predefined.Object = null;
-
-                predefined.ADSAFE =
-                predefined.lib = false;
-            }
             option = o;
         } else {
             option = {};
         }
         option.indent = option.indent || 4;
         option.maxerr = option.maxerr || 50;
-        adsafe_id = '';
-        adsafe_may = false;
-        adsafe_went = false;
-        approved = {};
-        if (option.approved) {
-            for (i = 0; i < option.approved.length; i += 1) {
-                approved[option.approved[i]] = option.approved[i];
-            }
-        } else {
-            approved.test = 'test';
-        }
+
         tab = '';
         for (i = 0; i < option.indent; i += 1) {
             tab += ' ';
@@ -5722,9 +5303,6 @@ loop:   for (;;) {
             advance();
             if (nexttoken.value.charAt(0) === '<') {
                 html();
-                if (option.adsafe && !adsafe_went) {
-                    warning("ADsafe violation: Missing ADSAFE.go.", this);
-                }
             } else {
                 switch (nexttoken.id) {
                 case '{':
@@ -5756,10 +5334,6 @@ loop:   for (;;) {
                     break;
 
                 default:
-                    if (option.adsafe && option.fragment) {
-                        error("Expected '{a}' and instead saw '{b}'.",
-                            nexttoken, '<div>', nexttoken.value);
-                    }
                     if (nexttoken.value === 'use strict') {
                         warning("Use the function form of \"use strict\".");
                         use_strict();
@@ -6049,7 +5623,6 @@ function usage() {
   print('jshint [options] file');
   print('options:');
   print('  --help');
-  print('  --adsafe     true, if ADsafe rules should be enforced');
   print('  --asi        true, if automatic semicolon insertion should be tolerated');
   print('  --bitwise    true, if bitwise operators should not be allowed');
   print('  --browser    true, if the standard browser globals should be predefined');
@@ -6088,13 +5661,10 @@ function usage() {
   print('  --regexp     true, if the . should not be allowed in regexp literals');
   print('  --rhino      true, if the Rhino environment globals should be predefined');
   print('  --undef      true, if variables should be declared before used');
-  print('  --safe       true, if use of some browser features should be restricted');
   print('  --shadow     true, if variable shadowing should be tolerated');
-  print('  --windows    true, if MS Windows-specific globals should be predefined');
   print('  --strict     true, require the "use strict"; pragma');
   print('  --sub        true, if all forms of subscript notation are tolerated');
   print('  --white      true, if strict whitespace rules apply');
-  print('  --widget     true  if the Yahoo Widgets globals should be predefined');
   exit(0);
 }
 
@@ -6107,8 +5677,6 @@ function parse_arguments(args) {
   for (i = 0; i < args.length; ++i) {
     if (args[i] === '-h' || args[i] === '--help') {
       usage();
-    } else if (args[i] === '--adsafe') {
-      res.option.adsafe = true;
     } else if (args[i] === '--asi') {
       res.option.asi = true;
     } else if (args[i] === '--bitwise') {
@@ -6195,20 +5763,14 @@ function parse_arguments(args) {
       res.option.rhino = true;
     } else if (args[i] === '--undef') {
       res.option.undef = true;
-    } else if (args[i] === '--safe') {
-      res.option.safe = true;
     } else if (args[i] === '--shadow') {
       res.option.shadow = true;
-    } else if (args[i] === '--windows') {
-      res.option.windows = true;
     } else if (args[i] === '--strict') {
       res.option.strict = true;
     } else if (args[i] === '--sub') {
       res.option.sub = true;
     } else if (args[i] === '--white') {
       res.option.white = true;
-    } else if (args[i] === '--widget') {
-      res.option.widget = true;
     } else if (args[i].match(/^-/)) {
       print('unknown option: ' + args[i]);
       exit(1);

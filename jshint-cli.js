@@ -3,7 +3,6 @@ function usage() {
   print('jshint [options] file');
   print('options:');
   print('  --help');
-  print('  --adsafe     true, if ADsafe rules should be enforced');
   print('  --asi        true, if automatic semicolon insertion should be tolerated');
   print('  --bitwise    true, if bitwise operators should not be allowed');
   print('  --browser    true, if the standard browser globals should be predefined');
@@ -42,13 +41,10 @@ function usage() {
   print('  --regexp     true, if the . should not be allowed in regexp literals');
   print('  --rhino      true, if the Rhino environment globals should be predefined');
   print('  --undef      true, if variables should be declared before used');
-  print('  --safe       true, if use of some browser features should be restricted');
   print('  --shadow     true, if variable shadowing should be tolerated');
-  print('  --windows    true, if MS Windows-specific globals should be predefined');
   print('  --strict     true, require the "use strict"; pragma');
   print('  --sub        true, if all forms of subscript notation are tolerated');
   print('  --white      true, if strict whitespace rules apply');
-  print('  --widget     true  if the Yahoo Widgets globals should be predefined');
   exit(0);
 }
 
@@ -61,8 +57,6 @@ function parse_arguments(args) {
   for (i = 0; i < args.length; ++i) {
     if (args[i] === '-h' || args[i] === '--help') {
       usage();
-    } else if (args[i] === '--adsafe') {
-      res.option.adsafe = true;
     } else if (args[i] === '--asi') {
       res.option.asi = true;
     } else if (args[i] === '--bitwise') {
@@ -149,20 +143,14 @@ function parse_arguments(args) {
       res.option.rhino = true;
     } else if (args[i] === '--undef') {
       res.option.undef = true;
-    } else if (args[i] === '--safe') {
-      res.option.safe = true;
     } else if (args[i] === '--shadow') {
       res.option.shadow = true;
-    } else if (args[i] === '--windows') {
-      res.option.windows = true;
     } else if (args[i] === '--strict') {
       res.option.strict = true;
     } else if (args[i] === '--sub') {
       res.option.sub = true;
     } else if (args[i] === '--white') {
       res.option.white = true;
-    } else if (args[i] === '--widget') {
-      res.option.widget = true;
     } else if (args[i].match(/^-/)) {
       print('unknown option: ' + args[i]);
       exit(1);
