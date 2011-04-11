@@ -41,6 +41,7 @@ function usage() {
   print('  --shadow     true, if variable shadowing should be tolerated');
   print('  --strict     true, require the "use strict"; pragma');
   print('  --sub        true, if all forms of subscript notation are tolerated');
+  print('  --supernew   true, if `new function () { ... };` and `new Object;` should be tolerated');
   print('  --white      true, if strict whitespace rules apply');
   print('  --indent=N   the indentation factor');
   print('  --maxerr=N   the maximum number of errors to allow');
@@ -131,6 +132,8 @@ function parse_arguments(args) {
       res.option.strict = true;
     } else if (args[i] === '--sub') {
       res.option.sub = true;
+    } else if (args[i] === '--supernew') {
+      res.option.supernew = true;
     } else if (args[i] === '--white') {
       res.option.white = true;
     } else if (args[i].match(/^--indent(?:=(.+))?/)) {
