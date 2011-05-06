@@ -4104,8 +4104,69 @@ option_parser.add_option('  --supernew     true, if `new function () { ... };` a
 option_parser.add_option('  --white        true, if strict whitespace rules apply');
 option_parser.add_option('  --wsh          true, if the Windows Scripting Host environment globals should be predefined');
 
+function _isArray(o) {
+  return Object.prototype.toString.call(o) === '[object Array]';
+}
+
+function geterrors() {
+  var data = JSHINT.data();
+  var errors = [];
+  var i, j, e, lines;
+
+  if (data.errors) {
+    for (i = 0; i < data.errors.length; ++i) {
+      e = data.errors[i];
+      if (e) {
+        errors.push({
+          line: e.line,
+          col: e.character,
+          message: e.reason + ' : ' + e.evidence
+        });
+      }
+    }
+  }
+
+  if (data.unused) {
+    for (i = 0; i < data.unused.length; ++i) {
+      e = data.unused[i];
+      lines = _isArray(e.line) ? e.line : [e.line];
+      for (j = 0; j < lines.length; ++j) {
+        errors.push({
+          line: lines[j],
+          col: 0,
+          message: 'Unused variable: ' + e.name
+        });
+      }
+    }
+  }
+
+  if (data.implieds) {
+    for (i = 0; i < data.implieds.length; ++i) {
+      e = data.implieds[i];
+      lines = _isArray(e.line) ? e.line : [e.line];
+      for (j = 0; j < lines.length; ++j) {
+        errors.push({
+          line: lines[j],
+          col: 0,
+          message: 'Implied global: ' + e.name
+        });
+      }
+    }
+  }
+
+  errors.sort(function(a, b) {
+    if (a.line < b.line) { return -1; }
+    else if (a.line > b.line) { return 1; }
+    else if (a.col < b.col) { return -1; }
+    else if (a.col > b.col) { return 1; }
+    return 0;
+  });
+
+  return errors;
+}
+
 function main() {
-  var args, filename, data, noerror, i;
+  var args, filename, data, errors, i, e;
   try {
     args = option_parser.parse_args(getargs());
   } catch (ex) {
@@ -4118,15 +4179,11 @@ function main() {
   }
   filename = args.args[0];
   data = readfile(filename, 'utf-8');
-  noerror = JSHINT(data, args.opts);
-  if (!noerror) {
-    for (i = 0; i < JSHINT.errors.length; ++i) {
-      var e = JSHINT.errors[i];
-      if (e === null) {
-        break;
-      }
-      print([filename, e.line, e.character, e.reason].join(':'));
-    }
+  JSHINT(data, args.opts);
+  errors = geterrors();
+  for (i = 0; i < errors.length; ++i) {
+    e = errors[i];
+    print([filename, e.line, e.col, e.message].join(':'));
   }
 }
 
