@@ -35,7 +35,7 @@ option_parser.add_option('  --nomen        true, if names should be checked');
 option_parser.add_option('  --onevar       true, if only one var statement per function should be allowed');
 option_parser.add_option('  --passfail     true, if the scan should stop on first error');
 option_parser.add_option('  --plusplus     true, if increment/decrement should not be allowed');
-option_parser.add_option('  --prototypejs  true, if Prototype and Scriptaculous globals shoudl be predefined');
+option_parser.add_option('  --prototypejs  true, if Prototype and Scriptaculous globals should be predefined');
 option_parser.add_option('  --regexp       true, if the . should not be allowed in regexp literals');
 option_parser.add_option('  --rhino        true, if the Rhino environment globals should be predefined');
 option_parser.add_option('  --undef        true, if variables should be declared before used');
@@ -44,6 +44,7 @@ option_parser.add_option('  --strict       true, require the "use strict"; pragm
 option_parser.add_option('  --sub          true, if all forms of subscript notation are tolerated');
 option_parser.add_option('  --supernew     true, if `new function () { ... };` and `new Object;` should be tolerated');
 option_parser.add_option('  --white        true, if strict whitespace rules apply');
+option_parser.add_option('  --wsh          true, if the Windows Scripting Host environment globals should be predefined');
 
 function main() {
   var args, filename, data, noerror, i;
