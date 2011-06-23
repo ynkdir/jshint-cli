@@ -190,30 +190,30 @@ goto :eof
  close, closed, closure, comment, condition, confirm, console, constructor,
  content, couch, create, css, curly, d, data, datalist, dd, debug, decodeURI,
  decodeURIComponent, defaultStatus, defineClass, deserialize, devel, document,
- edition, else, emit, encodeURI, encodeURIComponent, entityify, eqeqeq, eqnull,
- errors, es5, escape, eval, event, evidence, evil, ex, exception, exec, exps,
- expr, exports, FileReader, first, floor, focus, forin, fragment, frames, from,
- fromCharCode, fud, funct, function, functions, g, gc, getComputedStyle, getRow,
- GLOBAL, global, globals, globalstrict, hasOwnProperty, help, history, i, id,
+ dojo, dijit, dojox, define, edition, else, emit, encodeURI, encodeURIComponent,
+ entityify, eqeqeq, eqnull, errors, es5, escape, eval, event, evidence, evil,
+ ex, exception, exec, exps, expr, exports, FileReader, first, floor, focus,
+ forin, fragment, frames, from, fromCharCode, fud, funct, function, functions,
+ g, gc, getComputedStyle, getRow, GLOBAL, global, globals, globalstrict,
+ hasOwnProperty, help, history, i, id,
  identifier, immed, implieds, include, indent, indexOf, init, ins, instanceOf,
  isAlpha, isApplicationRunning, isArray, isDigit, isFinite, isNaN, join, jshint,
- JSHINT, json, jquery, jQuery, keys, label, labelled, last, laxbreak, latedef,
- lbp, led, left, length, line, load, loadClass, localStorage, location, log,
- loopfunc, m, match, maxerr, maxlen, member,message, meta, module, moveBy,
+ JSHINT, json, jquery, jQuery, keys, label, labelled, last, lastsemic, laxbreak,
+ latedef, lbp, led, left, length, line, load, loadClass, localStorage, location,
+ log, loopfunc, m, match, maxerr, maxlen, member,message, meta, module, moveBy,
  moveTo, mootools, name, navigator, new, newcap, noarg, node, noempty, nomen,
  nonew, nud, onbeforeunload, onblur, onerror, onevar, onfocus, onload, onresize,
  onunload, open, openDatabase, openURL, opener, opera, outer, param, parent,
  parseFloat, parseInt, passfail, plusplus, predef, print, process, prompt,
  prototype, prototypejs, push, quit, range, raw, reach, reason, regexp,
- readFile, readUrl, removeEventListener, replace, report, require, reserved,
- resizeBy, resizeTo, resolvePath, resumeUpdates, respond, rhino, right,
- runCommand, scroll, screen, scrollBy, scrollTo, scrollbar, search, seal, send,
+ readFile, readUrl, regexdash, removeEventListener, replace, report, require,
+ reserved, resizeBy, resizeTo, resolvePath, resumeUpdates, respond, rhino, right,
+ runCommand, scroll, screen, scripturl, scrollBy, scrollTo, scrollbar, search, seal, send,
  serialize, setInterval, setTimeout, shift, slice, sort,spawn, split, stack,
  status, start, strict, sub, substr, supernew, shadow, supplant, sum, sync,
- test, toLowerCase, toString, toUpperCase, toint32, token, top, type, typeOf,
- Uint16Array, Uint32Array, Uint8Array, undef, unused, urls, value, valueOf, var,
- version, WebSocket, white, window, Worker,
- wsh*/
+ test, toLowerCase, toString, toUpperCase, toint32, token, top, trailing, type,
+ typeOf, Uint16Array, Uint32Array, Uint8Array, undef, unused, urls, value, valueOf,
+ var, version, WebSocket, white, window, Worker, wsh*/
 
 /*global exports: false */
 
@@ -255,6 +255,7 @@ var JSHINT = (function () {
             curly       : true, // if curly braces around blocks should be required (even in if/for/while)
             debug       : true, // if debugger statements should be allowed
             devel       : true, // if logging globals should be predefined (console, alert, etc.)
+            dojo        : true, // if Dojo Toolkit globals should be predefined
             eqeqeq      : true, // if === should be required
             eqnull      : true, // if == null comparisons should be tolerated
             es5         : true, // if ES5 syntax should be allowed
@@ -278,13 +279,16 @@ var JSHINT = (function () {
             passfail    : true, // if the scan should stop on first error
             plusplus    : true, // if increment/decrement should not be allowed
             prototypejs : true, // if Prototype and Scriptaculous globals should be predefined
+            regexdash   : true, // if unescaped last dash (-) inside brackets should be tolerated
             regexp      : true, // if the . should not be allowed in regexp literals
             rhino       : true, // if the Rhino environment globals should be predefined
             undef       : true, // if variables should be declared before used
+            scripturl   : true, // if script-targeted URLs should be tolerated
             shadow      : true, // if variable shadowing should be tolerated
             strict      : true, // require the "use strict"; pragma
             sub         : true, // if all forms of subscript notation are tolerated
             supernew    : true, // if `new function () { ... };` and `new Object;` should be tolerated
+            trailing    : true, // if trailing whitespace rules apply
             white       : true, // if strict whitespace rules apply
             wsh         : true  // if the Windows Scripting Host environment globals should be predefined
         },
@@ -378,12 +382,20 @@ var JSHINT = (function () {
         },
 
         devel = {
-            alert           : false,
-            confirm         : false,
-            console         : false,
-            Debug           : false,
-            opera           : false,
-            prompt          : false
+            alert   : false,
+            confirm : false,
+            console : false,
+            Debug   : false,
+            opera   : false,
+            prompt  : false
+        },
+
+        dojo = {
+            dojo      : false,
+            dijit     : false,
+            dojox     : false,
+            define    : false,
+            "require" : false
         },
 
         escapes = {
@@ -763,6 +775,9 @@ var JSHINT = (function () {
         if (option.devel)
             combine(predefined, devel);
 
+        if (option.dojo)
+            combine(predefined, dojo);
+
         if (option.browser)
             combine(predefined, browser);
 
@@ -775,7 +790,7 @@ var JSHINT = (function () {
         if (option.wsh)
             combine(predefined, wsh);
 
-        if (option.globalstrict)
+        if (option.globalstrict && option.strict !== false)
             option.strict = true;
     }
 
@@ -878,7 +893,7 @@ var JSHINT = (function () {
 
             // Check for trailing whitespaces
             tw = s.search(/\s+$/);
-            if (option.white && ~tw)
+            if (option.trailing && ~tw && !~s.search(/^\s+$/))
                 warningAt("Trailing whitespace.", line, tw);
 
             return true;
@@ -898,7 +913,7 @@ var JSHINT = (function () {
             }
             t = Object.create(t);
             if (type === '(string)' || type === '(range)') {
-                if (jx.test(value)) {
+                if (!option.scripturl && jx.test(value)) {
                     warningAt("Script URL.", line, from);
                 }
             }
@@ -1329,7 +1344,7 @@ klass:                                  do {
                                                 }
                                                 break;
                                             case ']':
-                                                if (!q) {
+                                                if (!q && !option.regexdash) {
                                                     warningAt("Unescaped '{a}'.",
                                                             line, from + l - 1, '-');
                                                 }
@@ -2149,7 +2164,7 @@ loop:   for (;;) {
                 warning("Do not use 'new' for side effects.");
             }
             if (nexttoken.id !== ';') {
-                if (!option.asi) {
+                if (!option.asi && !(option.lastsemic && nexttoken.id == '}' && nexttoken.line == token.line)) {
                     warningAt("Missing semicolon.", token.line, token.from + token.value.length);
                 }
             } else {
@@ -2539,7 +2554,7 @@ loop:   for (;;) {
         if (left && right && left.id === '(string)' && right.id === '(string)') {
             left.value += right.value;
             left.character = right.character;
-            if (jx.test(left.value)) {
+            if (!option.scripturl && jx.test(left.value)) {
                 warning("JavaScript URL.", left);
             }
             return left;
@@ -4067,6 +4082,7 @@ option_parser.add_option('  --couch        true, if CouchDB globals should be pr
 option_parser.add_option('  --curly        true, if curly braces around blocks should be required (even in if/for/while)');
 option_parser.add_option('  --debug        true, if debugger statements should be allowed');
 option_parser.add_option('  --devel        true, if logging should be allowed (console, alert, etc.)');
+option_parser.add_option('  --dojo         true, if Dojo Toolkit globals should be predefined');
 option_parser.add_option('  --eqeqeq       true, if === should be required');
 option_parser.add_option('  --eqnull       true, if == null comparisons should be tolerated');
 option_parser.add_option('  --es5          true, if ES5 syntax should be allowed');
@@ -4094,13 +4110,16 @@ option_parser.add_option('  --onevar       true, if only one var statement per f
 option_parser.add_option('  --passfail     true, if the scan should stop on first error');
 option_parser.add_option('  --plusplus     true, if increment/decrement should not be allowed');
 option_parser.add_option('  --prototypejs  true, if Prototype and Scriptaculous globals should be predefined');
+option_parser.add_option('  --regexdash    true, if unescaped last dash (-) inside brackets should be tolerated');
 option_parser.add_option('  --regexp       true, if the . should not be allowed in regexp literals');
 option_parser.add_option('  --rhino        true, if the Rhino environment globals should be predefined');
 option_parser.add_option('  --undef        true, if variables should be declared before used');
+option_parser.add_option('  --scripturl    true, if script-targeted URLs should be tolerated');
 option_parser.add_option('  --shadow       true, if variable shadowing should be tolerated');
 option_parser.add_option('  --strict       true, require the "use strict"; pragma');
 option_parser.add_option('  --sub          true, if all forms of subscript notation are tolerated');
 option_parser.add_option('  --supernew     true, if `new function () { ... };` and `new Object;` should be tolerated');
+option_parser.add_option('  --trailing     true, if trailing whitespace rules apply');
 option_parser.add_option('  --white        true, if strict whitespace rules apply');
 option_parser.add_option('  --wsh          true, if the Windows Scripting Host environment globals should be predefined');
 

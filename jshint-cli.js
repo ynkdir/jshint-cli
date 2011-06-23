@@ -9,6 +9,7 @@ option_parser.add_option('  --couch        true, if CouchDB globals should be pr
 option_parser.add_option('  --curly        true, if curly braces around blocks should be required (even in if/for/while)');
 option_parser.add_option('  --debug        true, if debugger statements should be allowed');
 option_parser.add_option('  --devel        true, if logging should be allowed (console, alert, etc.)');
+option_parser.add_option('  --dojo         true, if Dojo Toolkit globals should be predefined');
 option_parser.add_option('  --eqeqeq       true, if === should be required');
 option_parser.add_option('  --eqnull       true, if == null comparisons should be tolerated');
 option_parser.add_option('  --es5          true, if ES5 syntax should be allowed');
@@ -36,13 +37,16 @@ option_parser.add_option('  --onevar       true, if only one var statement per f
 option_parser.add_option('  --passfail     true, if the scan should stop on first error');
 option_parser.add_option('  --plusplus     true, if increment/decrement should not be allowed');
 option_parser.add_option('  --prototypejs  true, if Prototype and Scriptaculous globals should be predefined');
+option_parser.add_option('  --regexdash    true, if unescaped last dash (-) inside brackets should be tolerated');
 option_parser.add_option('  --regexp       true, if the . should not be allowed in regexp literals');
 option_parser.add_option('  --rhino        true, if the Rhino environment globals should be predefined');
 option_parser.add_option('  --undef        true, if variables should be declared before used');
+option_parser.add_option('  --scripturl    true, if script-targeted URLs should be tolerated');
 option_parser.add_option('  --shadow       true, if variable shadowing should be tolerated');
 option_parser.add_option('  --strict       true, require the "use strict"; pragma');
 option_parser.add_option('  --sub          true, if all forms of subscript notation are tolerated');
 option_parser.add_option('  --supernew     true, if `new function () { ... };` and `new Object;` should be tolerated');
+option_parser.add_option('  --trailing     true, if trailing whitespace rules apply');
 option_parser.add_option('  --white        true, if strict whitespace rules apply');
 option_parser.add_option('  --wsh          true, if the Windows Scripting Host environment globals should be predefined');
 
