@@ -13,6 +13,7 @@ option_parser.add_option('  --dojo         true, if Dojo Toolkit globals should 
 option_parser.add_option('  --eqeqeq       true, if === should be required');
 option_parser.add_option('  --eqnull       true, if == null comparisons should be tolerated');
 option_parser.add_option('  --es5          true, if ES5 syntax should be allowed');
+option_parser.add_option('  --esnext       true, if es.next specific syntax should be allowed');
 option_parser.add_option('  --evil         true, if eval should be allowed');
 option_parser.add_option('  --expr         true, if ExpressionStatement should be allowed as Programs');
 option_parser.add_option('  --forin        true, if for in statements need not filter');
@@ -49,6 +50,8 @@ option_parser.add_option('  --rhino        true, if the Rhino environment global
 option_parser.add_option('  --undef        true, if variables should be declared before used');
 option_parser.add_option('  --scripturl    true, if script-targeted URLs should be tolerated');
 option_parser.add_option('  --shadow       true, if variable shadowing should be tolerated');
+option_parser.add_option('  --smarttabs    true, if smarttabs should be tolerated\n'
+                       + '                 (http://www.emacswiki.org/emacs/SmartTabs)');
 option_parser.add_option('  --strict       true, require the "use strict"; pragma');
 option_parser.add_option('  --sub          true, if all forms of subscript notation are tolerated');
 option_parser.add_option('  --supernew     true, if `new function () { ... };` and `new Object;` should be tolerated');
