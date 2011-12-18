@@ -17,6 +17,6 @@ bin/jshint.bat: jshint.js jshint-wsh.js optspec.js jshint-cli.js
 	# unix2dos
 	sed 's/$$/\r/' $@ > __tmp && mv __tmp $@
 
-jshint.js:
+update:
 	$(wget) https://github.com/jshint/jshint/raw/master/jshint.js
 
