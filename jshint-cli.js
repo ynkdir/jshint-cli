@@ -26,6 +26,7 @@ option_parser.add_option('  --indent=NUMBER  the indentation factor');
 option_parser.add_option('  --jquery       true, if jQuery globals should be predefined');
 option_parser.add_option('  --latedef      true, if the use before definition should not be tolerated');
 option_parser.add_option('  --laxbreak     true, if line breaks should not be checked');
+option_parser.add_option('  --laxcomma     true, if line breaks should not be checked around commas');
 option_parser.add_option('  --loopfunc     true, if functions should be allowed to be defined within loops');
 option_parser.add_option('  --maxerr=NUMBER  the maximum number of errors to allow');
 option_parser.add_option('  --maxlen=NUMBER  the maximum length of a source line');
@@ -57,6 +58,7 @@ option_parser.add_option('  --sub          true, if all forms of subscript notat
 option_parser.add_option('  --supernew     true, if `new function () { ... };` and `new Object;` should be tolerated');
 option_parser.add_option('  --trailing     true, if trailing whitespace rules apply');
 option_parser.add_option('  --validthis    true, if \'this\' inside a non-constructor function is valid.  This is a function scoped option only.');
+option_parser.add_option('  --withstmt     true, if with statements should be allowed');
 option_parser.add_option('  --white        true, if strict whitespace rules apply');
 option_parser.add_option('  --wsh          true, if the Windows Scripting Host environment globals should be predefined');
 
